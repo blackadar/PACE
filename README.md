@@ -1,4 +1,4 @@
-# Public Area Congestion Evaluator (P.A.C.E) #
+# Public Area Congestion Evaluator (P.A.C.E.) #
 
 This library is intended for deployment to low-energy computers in public areas to evaluate the number of people present in the area over time.
 With an attached network card capable of running in monitor mode, the tool will collect the MAC hardware addresses of the devices in the area,
