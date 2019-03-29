@@ -12,3 +12,6 @@ DATA_WRITE = 1  # Time interval in minutes to write dataframe to a file
 INSTALL_PATH = os.path.dirname(os.path.realpath(__file__))
 DATA_PATH = 'data/'
 PICKLE = 'data/telemetry.pkl'
+
+# Device Properties
+ADAPTER = 'wlx000f008dbafb'

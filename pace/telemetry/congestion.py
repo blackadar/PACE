@@ -5,18 +5,19 @@ Spooky code ahead
 import datetime
 import pickle
 
-from scapy.all import Dot11
+from scapy.all import Dot11, sniff
 
 import pace.namespace as namespace
 
 
 class Area:
 
-    def __init__(self):
+    def __init__(self, interface):
         """
         Initialize an Area with defaults
         """
         self.devices = {}
+        self.interface = interface
 
     def register(self, mac):
         """
@@ -35,6 +36,27 @@ class Area:
         :return:
         """
         self.devices = {}
+
+    def monitor(self):
+        """
+        Start sniffing the area
+        :return:
+        """
+        sniff(iface=self.interface, prn=self.handle_event)
+
+    def handle_event(self, pkt):
+        """
+            Handle a packet from scapy
+            I-Spy some useful data
+            :param pkt: Packet from sniffer
+            :return:
+            """
+        if not pkt.haslayer(Dot11):
+            return  # Don't care
+        if pkt.type == 0 and pkt.subtype == 4:  # Look only for Probe Requests
+            curmac = pkt.addr2
+            curmac = curmac.upper()
+            self.register(curmac)
 
     def write(self):
         """
@@ -57,20 +79,4 @@ class Area:
                     total_telemetry[mac] = self.devices[mac]
             rd.delete_file(namespace.PICKLE)
             with open(namespace.PICKLE, "wb") as pkl:
-                pickle.dump(self.devices, pkl)
-
-
-def handle_packet(pkt, area: Area):
-    """
-    Handle a packet from scapy
-    I-Spy some useful data
-    :param pkt:
-    :param area:
-    :return:
-    """
-    if not pkt.haslayer(Dot11):
-        return  # Don't care
-    if pkt.type == 0 and pkt.subtype == 4:  # Look only for Probe Requests
-        curmac = pkt.addr2
-        curmac = curmac.upper()
-        area.register(curmac)
+                pickle.dump(total_telemetry, pkl)
