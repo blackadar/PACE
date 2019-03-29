@@ -36,27 +36,27 @@ class Area:
         """
         self.devices = {}
 
-    def write(self, path):
+    def write(self):
         """
         Write telemetry to file
-        :param path:
         :return:
         """
-        # TODO: FILE I/O
-        # First check if a file exists. If so, read in the existing dictionary
-        # If no contents, make a new file and write the dick
-        # If contents exist, append the dictionary (KEEPING KEYS!) and write it out
-        # In whatever the user is in, check if exists/create a pickle spot
         import pace.analysis.read as rd
         rd.check_create_data()
-        total_telemetry = None
-        if not rd.data_exists(namespace.PICKLE):
-            pickle.dump(self.devices, namespace.PICKLE)
+        if not rd.data_exists(namespace.DATA_PATH):
+            with open(namespace.PICKLE, "wb") as pkl:
+                pickle.dump(self.devices, pkl)
         else:
-            total_telemetry = pickle.load(namespace.PICKLE)
-
-        for mac in self.devices.keys():
-            total_telemetry[mac].update(self.devices[mac])
+            with open(namespace.PICKLE, "rb") as pkl:
+                total_telemetry = pickle.load(pkl)
+            t_keys = total_telemetry.keys()
+            for mac in self.devices.keys():
+                if mac in t_keys:
+                    total_telemetry[mac].update(self.devices[mac])
+                else:
+                    total_telemetry[mac] = self.devices[mac]
+            # TODO: Delete existing pickle file
+            # TODO: Write total_telemetry to pickle file
 
 
 def handle_packet(pkt, area: Area):
