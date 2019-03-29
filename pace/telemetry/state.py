@@ -1,6 +1,7 @@
 """
 Handles setting up the Raspberry Pi for Monitoring
 """
+import subprocess
 
 
 def monitor(adapter):
@@ -9,7 +10,8 @@ def monitor(adapter):
     :param adapter:
     :return:
     """
-    pass
+    subprocess.call(['ifconfig', adapter, 'down'])
+    subprocess.call(['iwconfig', adapter, 'mode monitor'])
 
 
 def unmonitor(adapter):
@@ -18,7 +20,7 @@ def unmonitor(adapter):
     :param adapter:
     :return:
     """
-    pass
+    subprocess.call(['ifconfig', adapter, 'up'])
 
 
 def hop():

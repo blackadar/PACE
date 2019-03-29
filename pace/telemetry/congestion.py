@@ -2,8 +2,9 @@
 Packet Processing -> Congestion Data
 Spooky code ahead
 """
-from scapy.all import Dot11
 import datetime
+
+from scapy.all import Dot11
 
 
 class Area:
@@ -41,7 +42,7 @@ class Area:
         # TODO: FILE I/O
         # First check if a file exists. If so, read in the existing dictionary
         # If no contents, make a new file and write the dick
-        # If contents exist, append the disctionary (KEEPING KEYS!) and write it out
+        # If contents exist, append the dictionary (KEEPING KEYS!) and write it out
 
 
 def handle_packet(pkt, area: Area):
