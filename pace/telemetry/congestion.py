@@ -43,6 +43,7 @@ class Area:
         # First check if a file exists. If so, read in the existing dictionary
         # If no contents, make a new file and write the dick
         # If contents exist, append the dictionary (KEEPING KEYS!) and write it out
+        # In whatever the user is in, check if exissts/create a pickle spot
 
 
 def handle_packet(pkt, area: Area):
