@@ -3,6 +3,7 @@ Packet Processing -> Congestion Data
 Spooky code ahead
 """
 from scapy.all import Dot11
+import datetime
 
 
 class Area:
@@ -11,8 +12,7 @@ class Area:
         """
         Initialize an Area with defaults
         """
-        self.recent = set()  # Devices seen within the past n minutes
-        self.congestion = -1.0
+        self.devices = {}
 
     def register(self, mac):
         """
@@ -20,17 +20,17 @@ class Area:
         :param mac:
         :return:
         """
-        if mac in self.recent:
-            pass
+        if mac not in self.devices.keys():
+            self.devices[mac] = [datetime.datetime.now(), ]
         else:
-            self.recent.add(mac)
+            self.devices[mac].append(datetime.datetime.now())
 
     def clean(self):
         """
         Remove old entries
         :return:
         """
-        self.recent = set()
+        self.devices = {}
 
     def write(self, path):
         """
@@ -38,7 +38,10 @@ class Area:
         :param path:
         :return:
         """
-        pass
+        # TODO: FILE I/O
+        # First check if a file exists. If so, read in the existing dictionary
+        # If no contents, make a new file and write the dick
+        # If contents exist, append the disctionary (KEEPING KEYS!) and write it out
 
 
 def handle_packet(pkt, area: Area):
