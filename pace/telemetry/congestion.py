@@ -55,8 +55,9 @@ class Area:
                     total_telemetry[mac].update(self.devices[mac])
                 else:
                     total_telemetry[mac] = self.devices[mac]
-            # TODO: Delete existing pickle file
-            # TODO: Write total_telemetry to pickle file
+            rd.delete_file(namespace.PICKLE)
+            with open(namespace.PICKLE, "wb") as pkl:
+                pickle.dump(self.devices, pkl)
 
 
 def handle_packet(pkt, area: Area):

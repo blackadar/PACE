@@ -38,3 +38,12 @@ def clear_data(path):
                 os.unlink(file_path)
         except Exception as e:
             print("[!] " + str(e))
+
+
+def delete_file(path):
+    """
+    Deletes the path file
+    :param path:
+    :return:
+    """
+    os.remove(path)
