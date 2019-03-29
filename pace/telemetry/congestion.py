@@ -3,8 +3,11 @@ Packet Processing -> Congestion Data
 Spooky code ahead
 """
 import datetime
+import pickle
 
 from scapy.all import Dot11
+
+import pace.namespace as namespace
 
 
 class Area:
@@ -22,9 +25,9 @@ class Area:
         :return:
         """
         if mac not in self.devices.keys():
-            self.devices[mac] = [datetime.datetime.now(), ]
+            self.devices[mac] = {datetime.datetime.now(), }
         else:
-            self.devices[mac].append(datetime.datetime.now())
+            self.devices[mac].add(datetime.datetime.now())
 
     def clean(self):
         """
@@ -43,7 +46,17 @@ class Area:
         # First check if a file exists. If so, read in the existing dictionary
         # If no contents, make a new file and write the dick
         # If contents exist, append the dictionary (KEEPING KEYS!) and write it out
-        # In whatever the user is in, check if exissts/create a pickle spot
+        # In whatever the user is in, check if exists/create a pickle spot
+        import pace.analysis.read as rd
+        rd.check_create_data()
+        total_telemetry = None
+        if not rd.data_exists(namespace.PICKLE):
+            pickle.dump(self.devices, namespace.PICKLE)
+        else:
+            total_telemetry = pickle.load(namespace.PICKLE)
+
+        for mac in self.devices.keys():
+            total_telemetry[mac].update(self.devices[mac])
 
 
 def handle_packet(pkt, area: Area):
