@@ -14,3 +14,7 @@ to the analysis of traffic flow through their locations.
 It is critical to organize all contributions into the existing structure to maintain a clean codebase.
 Ensure all contributions conform to PEP-8.
 
+# Running the Software
+On a Raspberry Pi, pull a recent copy of the library. Modify the namespace to your device's adapter name.
+Run the command `sudo -b nohup python3 -m pace.cli` so that the tool can run in the background.
+To monitor the log, use `tail -f pace.log`.

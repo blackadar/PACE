@@ -3,6 +3,7 @@ Packet Processing -> Congestion Data
 Spooky code ahead
 """
 import datetime
+import logging
 import pickle
 import threading
 import time
@@ -18,6 +19,7 @@ class Area:
         """
         Initialize an Area with defaults
         """
+        logging.info("Initializing Area on interface " + str(interface))
         self.last_interval = datetime.datetime.now()
         self.interval_devices = set()  # Safe to ignore duplicates within interval
         self.interval_ssids = {}
@@ -50,6 +52,7 @@ class Area:
         self.interval_ssids = {}
         self.interval_total = 0
         self.last_interval = datetime.datetime.now()
+        logging.debug("Starting a new time frame at " + str(self.last_interval))
 
     def monitor(self):
         """
@@ -78,6 +81,7 @@ class Area:
         Oh yeah
         :return:
         """
+        logging.debug("Initializing Scapy on " + str(self.interface))
         sniff(iface=self.interface, prn=self.handle_event, stop_filter=self.__should_stop)
 
     def __should_stop(self, garbage):
@@ -92,6 +96,7 @@ class Area:
         Stop the monitor thread, if it exists
         :return:
         """
+        logging.debug("Stopping Area threads.")
         self.__stop.set()
 
     def handle_event(self, pkt):
@@ -113,9 +118,11 @@ class Area:
         Write telemetry to file
         :return:
         """
+        name = namespace.DATA_PATH + time.strftime("%Y%m%d_%H%M%S.pkl")
+        logging.debug("Writing to file " + name)
         telemetry = {'Interval': self.last_interval, 'Devices': self.interval_devices,
                      'Total Probes': self.interval_total, 'SSID Requests': self.interval_ssids}
         import pace.analysis.read
         pace.analysis.read.check_create_data()
-        with open(namespace.DATA_PATH + time.strftime("%Y%m%d_%H%M%S.pkl"), "wb") as pkl:
+        with open(name, "wb") as pkl:
             pickle.dump(telemetry, pkl)

@@ -1,6 +1,7 @@
 """
 Handles data input to analysis
 """
+import logging
 import os
 
 
@@ -10,9 +11,10 @@ def check_create_data():
     Create it if it does not exist.
     :return:
     """
+    logging.debug("Checking data path...")
     dirs = os.listdir(os.getcwd())
     if 'data' not in dirs:
-        print("[ ] Creating data directory.")
+        logging.debug("Data Directory not found, creating it...")
         os.mkdir('data')
 
 
@@ -30,6 +32,7 @@ def clear_data(path):
     :return: None
     """
     import os
+    logging.info("Removing existing data in " + str(path))
     for the_file in os.listdir(path):
         file_path = os.path.join(path, the_file)
         try:
@@ -45,6 +48,7 @@ def delete_file(path):
     :param path:
     :return:
     """
+    logging.info("Removing existing file at " + str(path))
     os.remove(path)
 
 

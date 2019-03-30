@@ -1,6 +1,7 @@
 """
 Handles setting up the Raspberry Pi for Monitoring
 """
+import logging
 import os
 import threading
 
@@ -13,6 +14,7 @@ def monitor(adapter):
     :param adapter:
     :return:
     """
+    logging.debug("Issuing OS commands for monitor mode.")
     os.system('ifconfig ' + adapter + ' down')
     os.system('iwconfig ' + adapter + ' mode monitor')
     os.system('ifconfig ' + adapter + ' up')
@@ -24,6 +26,7 @@ def unmonitor(adapter):
     :param adapter:
     :return:
     """
+    logging.debug("Recovering from monitor mode.")
     os.system('ifconfig ' + adapter + ' up')
 
 
@@ -48,6 +51,7 @@ class Hopper:
         :return:
         """
         import time
+        logging.debug("Hopping channels.")
         while not self.__stop:
             os.system('iwconfig ' + self.device + ' channel 1')
             if not self.__stop:
@@ -64,5 +68,6 @@ class Hopper:
         Stop! Data time
         :return:
         """
+        logging.debug("Stopping channel hopper.")
         self.__stop = True
         self.thread = None

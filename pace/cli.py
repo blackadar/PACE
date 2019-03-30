@@ -2,6 +2,7 @@
 Coordinates the operation of a RasPi PACE machine
 """
 import datetime
+import logging
 import signal
 import sys
 import time
@@ -17,6 +18,9 @@ def main():
     :return:
     """
 
+    # Start the Logger
+    logging.basicConfig(filename='pace.log', level=logging.DEBUG, format='%(levelname)s:  %(message)s')
+
     # Initialize device
     state.monitor(namespace.ADAPTER)
     hopper = state.Hopper(namespace.ADAPTER)
@@ -28,7 +32,7 @@ def main():
 
     # Register stopping tasks
     def signal_handler(sig, frame):
-        print('Exiting PACE.')
+        logging.info('Caught SIGINT, exiting..')
         hopper.stop()
         area.stop()
         area.write()
@@ -42,16 +46,16 @@ def main():
 
 
 def print_current(tot: int, interval: set, last: datetime.datetime, ssids: dict):
-    print("last dump: " + str(last))
-    print("total probes: " + str(tot))
-    print("mac pool: ")
+    logging.debug("last dump: " + str(last))
+    logging.debug("total probes: " + str(tot))
+    logging.debug("mac pool: ")
     for item in interval:
-        print(item)
-    print("ssid requests: ")
+        logging.debug(" " + item)
+    logging.debug("ssid requests: ")
     for key, val in ssids.items():
-        print(str(key) + ": " + str(val))
+        logging.debug(" " + str(key) + ": " + str(val))
 
-    print("---------------------------")
+    logging.debug("---------------------------")
 
 
 def print_telemetry(telemetry: dict):
