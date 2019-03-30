@@ -10,7 +10,6 @@ RECENT_PERSIST = 15  # Time in minutes to consider a device as already present
 # File I/O
 INSTALL_PATH = os.path.dirname(os.path.realpath(__file__))  # Path to Python code
 DATA_PATH = 'data/'  # Path to general data output
-PICKLE = DATA_PATH + 'telemetry.pkl'  # Path to pickle output
 DATA_WRITE = 1  # Time interval in minutes to write dataframe to a file
 
 # Device Properties

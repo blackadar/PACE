@@ -46,3 +46,17 @@ def delete_file(path):
     :return:
     """
     os.remove(path)
+
+
+def un_pickle(path):
+    """
+    Un-pickles a file at path.
+    WARNING: NEVER UN-PICKLE AN UNKNOWN FILE!
+    Python is 100% trusting of a pickle.
+    Hacked pickles can ruin a burger.
+    :param path: Path (relative or absolute) to pickle
+    :return: Un-pickled thing
+    """
+    import pickle
+    with open(path, "rb") as pkl:
+        return pickle.load(pkl)

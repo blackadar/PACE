@@ -18,7 +18,6 @@ class Area:
         """
         Initialize an Area with defaults
         """
-        self.telemetry = {}
         self.last_interval = datetime.datetime.now()
         self.interval_devices = set()  # Safe to ignore duplicates within interval
         self.interval_ssids = {}
@@ -42,14 +41,15 @@ class Area:
             else:
                 self.interval_ssids[info] += 1
 
-    def clean(self):
+    def new_interval(self):
         """
         Remove old entries
         :return:
         """
-        self.telemetry = {}
         self.interval_devices = set()
         self.interval_ssids = {}
+        self.interval_total = 0
+        self.last_interval = datetime.datetime.now()
 
     def monitor(self):
         """
@@ -69,12 +69,8 @@ class Area:
         """
         while not self.__should_stop(None):
             time.sleep(namespace.FRAME_INTERVAL)
-            self.telemetry[self.last_interval] = (self.interval_devices, self.interval_total, self.interval_ssids)
-            self.interval_total = 0
-            self.interval_devices = set()
-            self.interval_ssids = {}
             self.write()
-            self.last_interval = datetime.datetime.now()
+            self.new_interval()
 
     def __monitor_worker(self):
         """
@@ -117,17 +113,9 @@ class Area:
         Write telemetry to file
         :return:
         """
-        import pace.analysis.read as rd
-        rd.check_create_data()
-        if not rd.data_exists(namespace.DATA_PATH):
-            with open(namespace.PICKLE, "wb") as pkl:
-                pickle.dump(self.telemetry, pkl)
-        else:
-            with open(namespace.PICKLE, "rb") as pkl:
-                total_telemetry = pickle.load(pkl)
-            for dt in self.telemetry.keys():
-                # Assumes no duplicate time entries will appear
-                total_telemetry[dt] = self.telemetry[dt]
-            rd.delete_file(namespace.PICKLE)
-            with open(namespace.PICKLE, "wb") as pkl:
-                pickle.dump(total_telemetry, pkl)
+        telemetry = {'Interval': self.last_interval, 'Devices': self.interval_devices,
+                     'Total Probes': self.interval_total, 'SSID Requests': self.interval_ssids}
+        import pace.analysis.read
+        pace.analysis.read.check_create_data()
+        with open(namespace.DATA_PATH + time.strftime("%Y%m%d_%H%M%S.pkl"), "wb") as pkl:
+            pickle.dump(telemetry, pkl)
