@@ -11,7 +11,6 @@ def check_create_data():
     :return:
     """
     dirs = os.listdir(os.getcwd())
-    print("[ ] Working from %s" % os.getcwd())
     if 'data' not in dirs:
         print("[ ] Creating data directory.")
         os.mkdir('data')

@@ -6,12 +6,16 @@ import os
 
 # Interpretation Parameters
 RECENT_PERSIST = 15  # Time in minutes to consider a device as already present
-DATA_WRITE = 1  # Time interval in minutes to write dataframe to a file
 
 # File I/O
-INSTALL_PATH = os.path.dirname(os.path.realpath(__file__))
-DATA_PATH = 'data/'
-PICKLE = 'data/telemetry.pkl'
+INSTALL_PATH = os.path.dirname(os.path.realpath(__file__))  # Path to Python code
+DATA_PATH = 'data/'  # Path to general data output
+PICKLE = DATA_PATH + 'telemetry.pkl'  # Path to pickle output
+DATA_WRITE = 1  # Time interval in minutes to write dataframe to a file
 
 # Device Properties
-ADAPTER = 'wlx000f008dbafb'
+ADAPTER = 'wlx000f008dbafb'  # Monitor mode adapter iface name
+
+# Sniffing Parameters
+HOP_FREQUENCY = 2  # Seconds between channel hops
+FRAME_INTERVAL = 60 * 10  # Seconds between set separation

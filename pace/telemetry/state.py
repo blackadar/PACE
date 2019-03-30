@@ -1,8 +1,10 @@
 """
 Handles setting up the Raspberry Pi for Monitoring
 """
-import subprocess
+import os
 import threading
+
+import pace.namespace as namespace
 
 
 def monitor(adapter):
@@ -11,8 +13,9 @@ def monitor(adapter):
     :param adapter:
     :return:
     """
-    subprocess.call(['ifconfig', adapter, 'down'])
-    subprocess.call(['iwconfig', adapter, 'mode monitor'])
+    os.system('ifconfig ' + adapter + ' down')
+    os.system('iwconfig ' + adapter + ' mode monitor')
+    os.system('ifconfig ' + adapter + ' up')
 
 
 def unmonitor(adapter):
@@ -21,7 +24,7 @@ def unmonitor(adapter):
     :param adapter:
     :return:
     """
-    subprocess.call(['ifconfig', adapter, 'up'])
+    os.system('ifconfig ' + adapter + ' up')
 
 
 class Hopper:
@@ -46,15 +49,15 @@ class Hopper:
         """
         import time
         while not self.__stop:
-            subprocess.call('iwconfig', self.device, 'channel 1')
+            os.system('iwconfig ' + self.device + ' channel 1')
             if not self.__stop:
-                time.sleep(3)
-            subprocess.call('iwconfig', self.device, 'channel 6')
+                time.sleep(namespace.HOP_FREQUENCY)
+            os.system('iwconfig ' + self.device + ' channel 6')
             if not self.__stop:
-                time.sleep(3)
-            subprocess.call('iwconfig', self.device, 'channel 11')
+                time.sleep(namespace.HOP_FREQUENCY)
+            os.system('iwconfig ' + self.device + ' channel 11')
             if not self.__stop:
-                time.sleep(3)
+                time.sleep(namespace.HOP_FREQUENCY)
 
     def stop(self):
         """
