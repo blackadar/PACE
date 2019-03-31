@@ -16,5 +16,5 @@ Ensure all contributions conform to PEP-8.
 
 # Running the Software
 On a Raspberry Pi, pull a recent copy of the library. Modify the namespace to your device's adapter name.
-Run the command `sudo -b nohup python3 -m pace.cli` so that the tool can run in the background.
+Run the command `sudo -b python3 -m pace.cli` so that the tool can run in the background.
 To monitor the log, use `tail -f pace.log`.
