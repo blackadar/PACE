@@ -48,6 +48,12 @@ class Area:
         Remove old entries
         :return:
         """
+        # Attempt to prevent memory leak
+        del self.interval_devices
+        del self.interval_ssids
+        del self.interval_total
+        del self.last_interval
+
         self.interval_devices = set()
         self.interval_ssids = {}
         self.interval_total = 0
@@ -82,7 +88,7 @@ class Area:
         :return:
         """
         logging.debug("Initializing Scapy on " + str(self.interface))
-        sniff(iface=self.interface, prn=self.handle_event, stop_filter=self.__should_stop)
+        sniff(iface=self.interface, prn=self.handle_event, stop_filter=self.__should_stop, store=0)
 
     def __should_stop(self, garbage):
         """
@@ -111,7 +117,12 @@ class Area:
         if pkt.type == 0 and pkt.subtype == 4:  # IEEE 802.11 Management, Re-Association Request
             curmac = pkt.addr2
             curmac = curmac.upper()
-            self.register(curmac, pkt.info.decode('ascii'))
+            ssid = ''
+            try:
+                ssid = pkt.info.decode('utf-8')
+            except:
+                logging.debug("Couldn't decode a strange ssid: " + str(pkt.info))
+            self.register(curmac, ssid)
 
     def write(self):
         """
