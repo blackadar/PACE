@@ -4,6 +4,8 @@ Handles data input to analysis
 import logging
 import os
 
+import pandas as pd
+
 
 def check_create_data():
     """
@@ -64,3 +66,31 @@ def un_pickle(path):
     import pickle
     with open(path, "rb") as pkl:
         return pickle.load(pkl)
+
+
+def simple_pickle_jar(pickles: iter):
+    """
+    Makes an iterable collection of pickle data into a DataFrame
+    :param pickles: Iterable collection of dictionaries from pickles
+    :return: Pandas DataFrame
+    """
+    result = []
+    for pickle in pickles:
+        result.append(simple_series(pickle))
+    return pd.DataFrame(result).set_index('Interval')
+
+
+def simple_series(pickle_data: dict):
+    """
+    Translate Pickle Data into a Series with Simple Sizes
+    :param pickle_data: Dictionary from pace.analysis.read.un_pickle
+    :return: Pandas Series
+    """
+    simple = {
+        'Interval': pickle_data['Interval'],
+        'Devices': len(pickle_data['Devices']),
+        'SSID Requests': len(pickle_data['SSID Requests']),
+        'Total Probes': pickle_data['Total Probes'],
+    }
+
+    return pd.Series(list(simple.values()), index=simple.keys())
