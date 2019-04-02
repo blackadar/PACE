@@ -68,6 +68,19 @@ def un_pickle(path):
         return pickle.load(pkl)
 
 
+def find_all_pickles(path: str):
+    """
+    Finds and un-pickles all pickles in a directory
+    :param path: Path to pickles
+    :return: List of Pickles
+    """
+    ret = []
+    for file in os.listdir(path):
+        if file.endswith(".pkl"):
+            ret.append(un_pickle(os.path.join(path, file)))
+    return ret
+
+
 def simple_pickle_jar(pickles: iter):
     """
     Makes an iterable collection of pickle data into a DataFrame
