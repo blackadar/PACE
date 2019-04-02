@@ -27,6 +27,8 @@ def unmonitor(adapter):
     :return:
     """
     logging.debug("Recovering from monitor mode.")
+    os.system('ifconfig ' + adapter + ' down')
+    os.system('iwconfig ' + adapter + ' mode managed')
     os.system('ifconfig ' + adapter + ' up')
 
 
