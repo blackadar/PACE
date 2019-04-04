@@ -84,7 +84,8 @@ class Area:
         :return:
         """
         while not self.__should_stop(None):
-            time.sleep(namespace.FRAME_INTERVAL)
+            for i in range(namespace.FRAME_INTERVAL):
+                time.sleep(1)
             self.write()
             self.new_interval()
 

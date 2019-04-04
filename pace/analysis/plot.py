@@ -25,9 +25,10 @@ def congestion(telemetry: pd.DataFrame):
     return figure
 
 
-def polyfit_congestion(telemetry: pd.DataFrame):
+def polyfit_congestion(telemetry: pd.DataFrame, poly_degree=8):
     """
     Plot polynomial fit congestion over time
+    :param poly_degree: Degree of polynomial fit
     :param telemetry: Processed Simple DataFrame
     :return: matplotlib.figure
     """
@@ -41,7 +42,6 @@ def polyfit_congestion(telemetry: pd.DataFrame):
 
     y_values = telemetry['Devices'] / telemetry['Devices'].max()
     x_values = np.linspace(0, 1, len(telemetry.loc[:, "Devices"]))
-    poly_degree = 8
 
     coeffs = np.polyfit(x_values, y_values, poly_degree)
     poly_eqn = np.poly1d(coeffs)
