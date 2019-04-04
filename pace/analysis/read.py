@@ -54,7 +54,7 @@ def delete_file(path):
     os.remove(path)
 
 
-def un_pickle(path):
+def open_pickle(path):
     """
     Un-pickles a file at path.
     WARNING: NEVER UN-PICKLE AN UNKNOWN FILE!
@@ -77,23 +77,11 @@ def find_all_pickles(path: str):
     ret = []
     for file in os.listdir(path):
         if file.endswith(".pkl"):
-            ret.append(un_pickle(os.path.join(path, file)))
+            ret.append(open_pickle(os.path.join(path, file)))
     return ret
 
 
-def simple_pickle_jar(pickles: iter):
-    """
-    Makes an iterable collection of pickle data into a DataFrame
-    :param pickles: Iterable collection of dictionaries from pickles
-    :return: Pandas DataFrame
-    """
-    result = []
-    for pickle in pickles:
-        result.append(simple_series(pickle))
-    return pd.DataFrame(result).set_index('Interval')
-
-
-def simple_series(pickle_data: dict):
+def pickle_to_series(pickle_data: dict):
     """
     Translate Pickle Data into a Series with Simple Sizes
     :param pickle_data: Dictionary from pace.analysis.read.un_pickle
@@ -101,9 +89,26 @@ def simple_series(pickle_data: dict):
     """
     simple = {
         'Interval': pickle_data['Interval'],
-        'Devices': len(pickle_data['Devices']),
-        'SSID Requests': len(pickle_data['SSID Requests']),
+        'Devices': pickle_data['Devices'],
+        'Number Devices': len(pickle_data['Devices']),
+        'SSID Requests': pickle_data['SSID Requests'],
+        'Number SSID Requests': len(pickle_data['SSID Requests']),
         'Total Probes': pickle_data['Total Probes'],
     }
 
     return pd.Series(list(simple.values()), index=simple.keys())
+
+
+def pickle_jar(pickles: iter, translator=pickle_to_series):
+    """
+    Makes an iterable collection of pickle data into a DataFrame
+    :param translator: Function used to translate Pickle Data
+    :param pickles: Iterable collection of dictionaries from pickles
+    :return: Pandas DataFrame
+    """
+    result = []
+    for pickle in pickles:
+        result.append(translator(pickle))
+    return pd.DataFrame(result).set_index('Interval')
+
+
