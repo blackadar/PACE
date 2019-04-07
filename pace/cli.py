@@ -18,7 +18,7 @@ def main():
     """
 
     # Start the Logger
-    logging.basicConfig(filename='pace.log', level=logging.DEBUG, format='%(levelname)s:  %(message)s')
+    logging.basicConfig(filename='pace.log', level=logging.INFO, format='%(asctime)s %(levelname)s:  %(message)s')
 
     def handle_exception(exc_type, exc_value, exc_traceback):
         if issubclass(exc_type, KeyboardInterrupt):

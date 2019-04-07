@@ -13,7 +13,7 @@ DATA_PATH = 'data/'  # Path to general data output
 DATA_WRITE = 1  # Time interval in minutes to write dataframe to a file
 
 # Device Properties
-ADAPTER = 'wlx000f008dbafb'  # Monitor mode adapter iface name
+ADAPTER = 'wlan1'  # Monitor mode adapter iface name
 
 # Sniffing Parameters
 HOP_FREQUENCY = 2  # Seconds between channel hops

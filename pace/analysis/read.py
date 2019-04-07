@@ -16,7 +16,7 @@ def check_create_data():
     logging.debug("Checking data path...")
     dirs = os.listdir(os.getcwd())
     if 'data' not in dirs:
-        logging.debug("Data Directory not found, creating it...")
+        logging.info("Data Directory not found, creating it...")
         os.mkdir('data')
 
 

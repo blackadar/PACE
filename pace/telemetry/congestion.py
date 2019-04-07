@@ -65,7 +65,7 @@ class Area:
             self.interval_ssids = {}
             self.interval_total = 0
             self.last_interval = datetime.datetime.now()
-            logging.debug("Starting a new time frame at " + str(self.last_interval))
+            logging.info("Starting a new time frame at " + str(self.last_interval))
 
     def monitor(self):
         """
@@ -95,7 +95,7 @@ class Area:
         Oh yeah
         :return:
         """
-        logging.debug("Initializing Scapy on " + str(self.interface))
+        logging.info("Initializing Scapy on " + str(self.interface))
         sniff(iface=self.interface, prn=self.handle_event, stop_filter=self.__should_stop, store=0)
 
     def __should_stop(self, __):
@@ -110,7 +110,7 @@ class Area:
         Stop the monitor thread, if it exists
         :return:
         """
-        logging.debug("Stopping Area threads.")
+        logging.info("Stopping Area threads.")
         self.__stop.set()
 
     def handle_event(self, pkt):
