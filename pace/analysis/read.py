@@ -88,12 +88,12 @@ def pickle_to_series(pickle_data: dict):
     :return: Pandas Series
     """
     simple = {
-        'Interval': pickle_data['Interval'],
-        'Devices': pickle_data['Devices'],
-        'Number Devices': len(pickle_data['Devices']),
-        'SSID Requests': pickle_data['SSID Requests'],
-        'Number SSID Requests': len(pickle_data['SSID Requests']),
-        'Total Probes': pickle_data['Total Probes'],
+        'Interval': pickle_data['Interval'],  # start of interval
+        'Devices': pickle_data['Devices'],  # set of mac addresses
+        'Number Devices': len(pickle_data['Devices']),  # size of set of mac addresses
+        'SSID Requests': pickle_data['SSID Requests'],  # which network devices are looking for
+        'Number SSID Requests': len(pickle_data['SSID Requests']),  # length of set of ssid requests
+        'Total Probes': pickle_data['Total Probes'],  # total number of network requests
     }
 
     return pd.Series(list(simple.values()), index=simple.keys())
@@ -110,5 +110,4 @@ def pickle_jar(pickles: iter, translator=pickle_to_series):
     for pickle in pickles:
         result.append(translator(pickle))
     return pd.DataFrame(result).set_index('Interval')
-
 
