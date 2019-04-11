@@ -4,6 +4,7 @@ Handles data input to analysis
 import logging
 import os
 
+import numpy as np
 import pandas as pd
 
 
@@ -109,5 +110,9 @@ def pickle_jar(pickles: iter, translator=pickle_to_series):
     result = []
     for pickle in pickles:
         result.append(translator(pickle))
-    return pd.DataFrame(result).set_index('Interval')
-
+    # Introspective Calculations
+    result = pd.DataFrame(result).set_index('Interval')
+    result['Congestion'] = result['Number Devices'] / np.percentile(result['Number Devices'].values,
+                                                                    95)  # area congestion metric
+    result['Congestion'] = result['Congestion'].apply(lambda x: x if x <= 1 else 1)
+    return result
