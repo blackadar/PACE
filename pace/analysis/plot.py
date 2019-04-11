@@ -111,3 +111,47 @@ def SSID_freq(telemetry: pd.DataFrame):
     ax.set_ylabel("number of requests")
     mi = ax.plot(telemetry['SSID Requests']/telemetry['Number SSID Requests'])
     return figure
+
+
+def SSID_plot(telemetry: pd.DataFrame):
+    """
+    Creates a bar graph of total the SSID's
+    :param telemetry:
+    :return: matplotlib.figure
+    """
+    import collections
+    dic0 = telemetry['SSID Requests']
+    dicts = dic0.values
+    c = {}
+    for d in dicts:
+        for i in d.keys():
+            if i in c.keys():
+                c[i] += d[i]
+            else:
+                c[i] = d[i]
+    import operator
+    c = sorted(c.items(), key=operator.itemgetter(1), reverse=True)
+    sorted_dict = collections.OrderedDict(c)
+
+    figure = plt.figure(figsize=(16, 9))
+    ax = figure.add_subplot(111)
+    tick_labels1 = list(sorted_dict.keys())[:20:2][::-1]
+    tick_labels2 = list(sorted_dict.keys())[1:20:2]
+    tick_labels = tick_labels1 + tick_labels2
+    bar_values1 = list(sorted_dict.values())[:20:2][::-1]
+    bar_values2 = list(sorted_dict.values())[1:20:2]
+    bar_values = bar_values1 + bar_values2
+
+    count = 0
+    for i in tick_labels:
+        if len(i) > 15:
+            tick_labels[count] = i[:15] + '...'
+        count += 1
+
+    plt.xticks(rotation='vertical')
+    ax.bar(range(20), bar_values, align='center', tick_label=tick_labels)
+
+    ax.set_title("SSID Request Frequency")
+    ax.set_xlabel("SSID")
+    ax.set_ylabel("Number of Requests")
+    return figure
