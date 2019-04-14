@@ -51,6 +51,67 @@ def polyfit_congestion(telemetry: pd.DataFrame, poly_degree=8):
     return figure
 
 
+def eval_model(times, congestion, model):
+    """
+    Plot the model vs the data
+    :param times:
+    :param congestion:
+    :param model:
+    :return:
+    """
+    import matplotlib.pyplot as plt
+    figure = plt.figure()
+    ax = figure.add_subplot(111)
+    ax.set_title("Model Prediction vs Data")
+    ax.set_xlabel("24-Hour Time")
+    ax.set_ylabel("Congestion")
+
+    ticks = range(0, 1441, 120)
+    ax.set_xticks(ticks)
+
+    dic = {0: '00',
+           60 * 1: '01',
+           60 * 2: '02',
+           60 * 3: '03',
+           60 * 4: '04',
+           60 * 5: '05',
+           60 * 6: '06',
+           60 * 7: '07',
+           60 * 8: '08',
+           60 * 9: '09',
+           60 * 10: '10',
+           60 * 11: '11',
+           60 * 12: '12',
+           60 * 13: '13',
+           60 * 14: '14',
+           60 * 15: '15',
+           60 * 16: '16',
+           60 * 17: '17',
+           60 * 18: '18',
+           60 * 19: '19',
+           60 * 20: '20',
+           60 * 21: '21',
+           60 * 22: '22',
+           60 * 23: '23',
+           60 * 24: '00',
+           }
+    labels = [ticks[i] if t not in dic.keys() else dic[t] for i, t in enumerate(ticks)]
+
+    ax.set_xticklabels(labels)
+
+    x = times[:, 0]
+    y = congestion.to_numpy()
+
+    ax.scatter(x, y, label="Actual")
+
+    predictions = model.predict(np.arange(0, 1440).reshape(-1, 1))
+
+    ax.scatter(np.arange(1440), predictions, label="Prediction")
+
+    ax.legend()
+    return figure
+
+
 def devices_per_probes(telemetry: pd.DataFrame):
     """
     plot number of devices per number of probes
