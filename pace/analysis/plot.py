@@ -16,7 +16,7 @@ def congestion(telemetry: pd.DataFrame):
     :param telemetry: Processed Simple DataFrame
     :return: matplotlib.figure
     """
-    figure = plt.figure(figsize=(20, 4))
+    figure = plt.figure(figsize=(20, 10))
     ax = figure.add_subplot(111)
     ax.set_title("Area Congestion")
     ax.set_xlabel("Time")
